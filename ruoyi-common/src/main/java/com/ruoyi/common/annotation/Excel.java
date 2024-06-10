@@ -8,7 +8,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * 自定义导出Excel数据注解
@@ -54,9 +54,9 @@ public @interface Excel {
     int scale() default -1;
 
     /**
-     * BigDecimal 舍入规则 默认:BigDecimal.ROUND_HALF_EVEN
+     * BigDecimal 舍入规则 默认:RoundingMode.HALF_EVEN
      */
-    int roundingMode() default BigDecimal.ROUND_HALF_EVEN;
+    RoundingMode roundingMode() default RoundingMode.HALF_EVEN;
 
     /**
      * 导出时在excel中每个列的高度
@@ -91,7 +91,7 @@ public @interface Excel {
     /**
      * 是否从字典读数据到combo,默认不读取,如读取需要设置dictType注解.
      */
-    public boolean comboReadDict() default false;
+    boolean comboReadDict() default false;
 
     /**
      * 是否需要纵向合并单元格,应对需求:含有list集合单元格)

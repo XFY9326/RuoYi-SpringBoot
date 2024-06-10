@@ -152,17 +152,11 @@ public class VelocityUtils {
 
     private static String getUseWebTypeFromTplWebType(String tplWebType) {
         if (tplWebType == null) tplWebType = "element-plus";
-        String useWebType;
-        switch (tplWebType) {
-            case "element-ui":
-                useWebType = "vm/vue";
-                break;
-            case "element-plus":
-                useWebType = "vm/vue/v3";
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown web type: " + tplWebType);
-        }
+        String useWebType = switch (tplWebType) {
+            case "element-ui" -> "vm/vue";
+            case "element-plus" -> "vm/vue/v3";
+            default -> throw new IllegalArgumentException("Unknown web type: " + tplWebType);
+        };
         return useWebType;
     }
 

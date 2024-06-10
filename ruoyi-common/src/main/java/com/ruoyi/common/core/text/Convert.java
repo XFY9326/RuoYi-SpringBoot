@@ -479,19 +479,11 @@ public class Convert {
             return defaultValue;
         }
         valueStr = valueStr.trim().toLowerCase();
-        switch (valueStr) {
-            case "true":
-            case "yes":
-            case "ok":
-            case "1":
-                return true;
-            case "false":
-            case "no":
-            case "0":
-                return false;
-            default:
-                return defaultValue;
-        }
+        return switch (valueStr) {
+            case "true", "yes", "ok", "1" -> true;
+            case "false", "no", "0" -> false;
+            default -> defaultValue;
+        };
     }
 
     /**
@@ -840,7 +832,7 @@ public class Convert {
             double d = scale.doubleValue();
             s += (digit[(int) (Math.floor(d * Math.pow(10, i)) % 10)] + fraction[i]).replaceAll("(零.)+", "");
         }
-        if (s.length() < 1) {
+        if (s.isEmpty()) {
             s = "整";
         }
         int integerPart = (int) Math.floor(n);

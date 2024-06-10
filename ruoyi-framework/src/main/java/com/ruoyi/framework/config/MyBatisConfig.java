@@ -46,7 +46,7 @@ public class MyBatisConfig {
                 aliasesPackage = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX
                         + ClassUtils.convertClassNameToResourcePath(aliasesPackage.trim()) + "/" + DEFAULT_RESOURCE_PATTERN;
                 Resource[] resources = resolver.getResources(aliasesPackage);
-                if (resources != null && resources.length > 0) {
+                if (resources.length > 0) {
                     MetadataReader metadataReader = null;
                     for (Resource resource : resources) {
                         if (resource.isReadable()) {

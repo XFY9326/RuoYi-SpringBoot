@@ -17,13 +17,13 @@ import com.ruoyi.generator.domain.GenTable;
 import com.ruoyi.generator.domain.GenTableColumn;
 import com.ruoyi.generator.service.IGenTableColumnService;
 import com.ruoyi.generator.service.IGenTableService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,22 +118,15 @@ public class GenController extends BaseController {
     public AjaxResult createTableSave(String sql) {
         try {
             SqlUtil.filterKeyword(sql);
-            DbType dbType;
-            switch (GenConfig.getDbType().toLowerCase().trim()) {
-                case "mysql":
-                    dbType = DbType.mysql;
-                    break;
-                case "oracle":
-                    dbType = DbType.oracle;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unsupported db type: " + GenConfig.getDbType());
-            }
+            DbType dbType = switch (GenConfig.getDbType().toLowerCase().trim()) {
+                case "mysql" -> DbType.mysql;
+                case "oracle" -> DbType.oracle;
+                default -> throw new IllegalArgumentException("Unsupported db type: " + GenConfig.getDbType());
+            };
             List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, dbType);
             List<String> tableNames = new ArrayList<>();
             for (SQLStatement sqlStatement : sqlStatements) {
-                if (sqlStatement instanceof OracleCreateTableStatement) {
-                    OracleCreateTableStatement createTableStatement = (OracleCreateTableStatement) sqlStatement;
+                if (sqlStatement instanceof OracleCreateTableStatement createTableStatement) {
                     if (genTableService.createTable(createTableStatement.toString())) {
                         String tableName = createTableStatement.getTableName().replaceAll("`", "");
                         tableNames.add(tableName);

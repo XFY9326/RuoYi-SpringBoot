@@ -1,6 +1,6 @@
 package com.ruoyi.framework.config;
 
-import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  */
 @Configuration
 @EnableCaching
-public class RedisConfig extends CachingConfigurerSupport {
+public class RedisConfig implements CachingConfigurer {
     @Bean
     @SuppressWarnings(value = {"unchecked", "rawtypes"})
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
@@ -49,17 +49,18 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 限流脚本
      */
     private String limitScriptText() {
-        return "local key = KEYS[1]\n" +
-                "local count = tonumber(ARGV[1])\n" +
-                "local time = tonumber(ARGV[2])\n" +
-                "local current = redis.call('get', key);\n" +
-                "if current and tonumber(current) > count then\n" +
-                "    return tonumber(current);\n" +
-                "end\n" +
-                "current = redis.call('incr', key)\n" +
-                "if tonumber(current) == 1 then\n" +
-                "    redis.call('expire', key, time)\n" +
-                "end\n" +
-                "return tonumber(current);";
+        return """
+                local key = KEYS[1]
+                local count = tonumber(ARGV[1])
+                local time = tonumber(ARGV[2])
+                local current = redis.call('get', key);
+                if current and tonumber(current) > count then
+                    return tonumber(current);
+                end
+                current = redis.call('incr', key)
+                if tonumber(current) == 1 then
+                    redis.call('expire', key, time)
+                end
+                return tonumber(current);""";
     }
 }

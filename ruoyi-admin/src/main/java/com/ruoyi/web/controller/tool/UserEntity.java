@@ -17,6 +17,7 @@ public class UserEntity {
     @ApiModelProperty("用户手机")
     private String mobile;
 
+
     public UserEntity() {
 
     }

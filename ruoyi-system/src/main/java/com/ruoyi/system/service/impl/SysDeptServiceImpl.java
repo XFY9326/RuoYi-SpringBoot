@@ -67,8 +67,8 @@ public class SysDeptServiceImpl implements ISysDeptService {
      */
     @Override
     public List<SysDept> buildDeptTree(List<SysDept> depts) {
-        List<SysDept> returnList = new ArrayList<SysDept>();
-        List<Long> tempList = depts.stream().map(SysDept::getDeptId).collect(Collectors.toList());
+        List<SysDept> returnList = new ArrayList<>();
+        List<Long> tempList = depts.stream().map(SysDept::getDeptId).toList();
         for (SysDept dept : depts) {
             // 如果是顶级节点, 遍历该父节点的所有子节点
             if (!tempList.contains(dept.getParentId())) {
@@ -250,7 +250,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
         for (SysDept child : children) {
             child.setAncestors(child.getAncestors().replaceFirst(oldAncestors, newAncestors));
         }
-        if (children.size() > 0) {
+        if (!children.isEmpty()) {
             deptMapper.updateDeptChildren(children);
         }
     }
@@ -284,10 +284,8 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * 得到子节点列表
      */
     private List<SysDept> getChildList(List<SysDept> list, SysDept t) {
-        List<SysDept> tlist = new ArrayList<SysDept>();
-        Iterator<SysDept> it = list.iterator();
-        while (it.hasNext()) {
-            SysDept n = (SysDept) it.next();
+        List<SysDept> tlist = new ArrayList<>();
+        for (SysDept n : list) {
             if (StringUtils.isNotNull(n.getParentId()) && n.getParentId().longValue() == t.getDeptId().longValue()) {
                 tlist.add(n);
             }
@@ -299,6 +297,6 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * 判断是否有子节点
      */
     private boolean hasChild(List<SysDept> list, SysDept t) {
-        return getChildList(list, t).size() > 0;
+        return !getChildList(list, t).isEmpty();
     }
 }

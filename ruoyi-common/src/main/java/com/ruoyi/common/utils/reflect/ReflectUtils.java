@@ -181,7 +181,7 @@ public class ReflectUtils {
         for (Class<?> superClass = obj.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
             try {
                 Field field = superClass.getDeclaredField(fieldName);
-                makeAccessible(field);
+                makeAccessible(obj, field);
                 return field;
             } catch (NoSuchFieldException ignored) {
             }
@@ -205,7 +205,7 @@ public class ReflectUtils {
         for (Class<?> searchType = obj.getClass(); searchType != Object.class; searchType = searchType.getSuperclass()) {
             try {
                 Method method = searchType.getDeclaredMethod(methodName, parameterTypes);
-                makeAccessible(method);
+                makeAccessible(obj, method);
                 return method;
             } catch (NoSuchMethodException ignored) {
             }
@@ -229,7 +229,7 @@ public class ReflectUtils {
             Method[] methods = searchType.getDeclaredMethods();
             for (Method method : methods) {
                 if (method.getName().equals(methodName) && method.getParameterTypes().length == argsNum) {
-                    makeAccessible(method);
+                    makeAccessible(obj, method);
                     return method;
                 }
             }
@@ -240,9 +240,9 @@ public class ReflectUtils {
     /**
      * 改变private/protected的方法为public，尽量不调用实际改动的语句，避免JDK的SecurityManager抱怨。
      */
-    public static void makeAccessible(Method method) {
+    public static void makeAccessible(Object obj, Method method) {
         if ((!Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers()))
-                && !method.isAccessible()) {
+                && !method.canAccess(obj)) {
             method.setAccessible(true);
         }
     }
@@ -250,9 +250,9 @@ public class ReflectUtils {
     /**
      * 改变private/protected的成员变量为public，尽量不调用实际改动的语句，避免JDK的SecurityManager抱怨。
      */
-    public static void makeAccessible(Field field) {
+    public static void makeAccessible(Object obj, Field field) {
         if ((!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field.getDeclaringClass().getModifiers())
-                || Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {
+                || Modifier.isFinal(field.getModifiers())) && !field.canAccess(obj)) {
             field.setAccessible(true);
         }
     }
@@ -298,7 +298,7 @@ public class ReflectUtils {
             throw new RuntimeException("Instance must not be null");
         }
         Class clazz = instance.getClass();
-        if (clazz != null && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
+        if (clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
             Class<?> superClass = clazz.getSuperclass();
             if (superClass != null && !Object.class.equals(superClass)) {
                 return superClass;
