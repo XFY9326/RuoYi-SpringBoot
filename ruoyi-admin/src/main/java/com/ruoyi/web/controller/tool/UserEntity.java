@@ -1,20 +1,19 @@
 package com.ruoyi.web.controller.tool;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@ApiModel(value = "UserEntity", description = "用户实体")
+@Schema(title = "UserEntity", description = "用户实体")
 public class UserEntity {
-    @ApiModelProperty("用户ID")
+    @Schema(title = "用户ID")
     private Integer userId;
 
-    @ApiModelProperty("用户名称")
+    @Schema(title = "用户名称")
     private String username;
 
-    @ApiModelProperty("用户密码")
+    @Schema(title = "用户密码")
     private String password;
 
-    @ApiModelProperty("用户手机")
+    @Schema(title = "用户手机")
     private String mobile;
 
 

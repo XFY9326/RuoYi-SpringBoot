@@ -93,6 +93,15 @@ spring:
           # #连接池最大阻塞等待时间（使用负值表示没有限制）
           max-wait: -1ms
 
+# SpringDoc
+springdoc:
+  api-docs:
+    enabled: true
+  # Swagger
+  swagger-ui:
+    enabled: true
+    disable-swagger-default-url: true
+
 # token配置
 token:
   # 令牌自定义标识
@@ -119,13 +128,6 @@ pagehelper:
   helperDialect: oracle
   supportMethodsArguments: true
   params: count=countSql
-
-# Swagger配置
-swagger:
-  # 是否开启swagger
-  enabled: true
-  # 请求前缀
-  pathMapping: /dev-api
 
 # 防止XSS攻击
 xss:
