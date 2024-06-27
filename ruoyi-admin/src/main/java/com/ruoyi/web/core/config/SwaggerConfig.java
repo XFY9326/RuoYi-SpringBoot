@@ -47,13 +47,24 @@ public class SwaggerConfig {
     }
 
     /**
-     * 配置分组
+     * 配置默认分组
      */
     @Bean
-    public GroupedOpenApi publicApi() {
+    public GroupedOpenApi defaultApi() {
+        return GroupedOpenApi.builder()
+                .group("default")
+                .pathsToMatch("/**")
+                .pathsToExclude("/test/**")
+                .build();
+    }
+
+    /**
+     * 配置测试分组
+     */
+    @Bean
+    public GroupedOpenApi testApi() {
         return GroupedOpenApi.builder()
                 .group("test")
-                .packagesToScan("com.ruoyi.web.controller")
                 .pathsToMatch("/test/**")
                 .build();
     }
