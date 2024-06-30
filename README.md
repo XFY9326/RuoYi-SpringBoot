@@ -46,7 +46,7 @@ spring:
       master:
         url: jdbc:mysql://localhost:3306/ry-vue?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: root
-        password: password
+        password: 123456
 
 # ruoyi-generator generator.yml
 gen:

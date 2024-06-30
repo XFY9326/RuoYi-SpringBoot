@@ -39,6 +39,11 @@ public class GenConfig {
      */
     public static String dbType;
 
+    /**
+     * 默认前端代码类型
+     */
+    public static String webType;
+
     public static String getAuthor() {
         return author;
     }
@@ -81,6 +86,15 @@ public class GenConfig {
 
     @Value("${dbType}")
     public void setDbType(String dbType) {
-        GenConfig.dbType = dbType;
+        GenConfig.dbType = dbType.toLowerCase().trim();
+    }
+
+    public static String getWebType() {
+        return webType;
+    }
+
+    @Value("${webType}")
+    public void setWebType(String webType) {
+        GenConfig.webType = webType.toLowerCase().trim();
     }
 }

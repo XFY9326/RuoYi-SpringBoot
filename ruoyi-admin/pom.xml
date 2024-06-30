@@ -32,17 +32,17 @@
         </dependency>
 
         <!--oracle驱动 -->
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc14</artifactId>
-            <version>${oracle.version}</version>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.oracle</groupId>-->
+        <!--            <artifactId>ojdbc14</artifactId>-->
+        <!--            <version>${oracle.version}</version>-->
+        <!--        </dependency>-->
 
         <!-- Mysql驱动 -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.mysql</groupId>-->
-        <!--            <artifactId>mysql-connector-j</artifactId>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+        </dependency>
 
         <!-- 核心模块-->
         <dependency>

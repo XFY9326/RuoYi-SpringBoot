@@ -118,7 +118,7 @@ public class GenController extends BaseController {
     public AjaxResult createTableSave(String sql) {
         try {
             SqlUtil.filterKeyword(sql);
-            DbType dbType = switch (GenConfig.getDbType().toLowerCase().trim()) {
+            DbType dbType = switch (GenConfig.getDbType()) {
                 case "mysql" -> DbType.mysql;
                 case "oracle" -> DbType.oracle;
                 default -> throw new IllegalArgumentException("Unsupported db type: " + GenConfig.getDbType());
