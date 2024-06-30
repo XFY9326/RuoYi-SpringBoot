@@ -31,10 +31,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class TokenService {
-    protected static final long MILLIS_SECOND = 1000;
-    protected static final long MILLIS_MINUTE = 60 * MILLIS_SECOND;
     private static final Logger log = LoggerFactory.getLogger(TokenService.class);
-    private static final Long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
+
     // 令牌自定义标识
     @Value("${token.header}")
     private String header;
@@ -44,6 +42,9 @@ public class TokenService {
     // 令牌有效期（默认30分钟）
     @Value("${token.expireTime}")
     private int expireTime;
+    // 令牌刷新时间（默认20分钟）
+    @Value("${token.refreshTime}")
+    private int refreshTime;
     @Autowired
     private RedisCache redisCache;
 
@@ -106,15 +107,15 @@ public class TokenService {
     }
 
     /**
-     * 验证令牌有效期，相差不足20分钟，自动刷新缓存
+     * 验证令牌有效期，超过刷新时间，自动刷新缓存
      *
-     * @param loginUser
-     * @return 令牌
+     * @param loginUser 用户信息
      */
     public void verifyToken(LoginUser loginUser) {
-        long expireTime = loginUser.getExpireTime();
+        long sessionExpireTime = loginUser.getExpireTime();
         long currentTime = System.currentTimeMillis();
-        if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
+        long refreshActionTime = TimeUnit.MINUTES.toMillis(Math.max(0L, expireTime - refreshTime));
+        if (sessionExpireTime - currentTime <= refreshActionTime) {
             refreshToken(loginUser);
         }
     }
@@ -126,7 +127,7 @@ public class TokenService {
      */
     public void refreshToken(LoginUser loginUser) {
         loginUser.setLoginTime(System.currentTimeMillis());
-        loginUser.setExpireTime(loginUser.getLoginTime() + expireTime * MILLIS_MINUTE);
+        loginUser.setExpireTime(loginUser.getLoginTime() + TimeUnit.MINUTES.toMillis(expireTime));
         // 根据uuid将loginUser缓存
         String userKey = getTokenKey(loginUser.getToken());
         redisCache.setCacheObject(userKey, loginUser, expireTime, TimeUnit.MINUTES);
@@ -185,7 +186,7 @@ public class TokenService {
     /**
      * 获取请求token
      *
-     * @param request
+     * @param request 请求
      * @return token
      */
     private String getToken(HttpServletRequest request) {
