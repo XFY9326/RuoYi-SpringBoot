@@ -128,7 +128,7 @@ public class VelocityUtils {
      * @return 模板列表
      */
     public static List<String> getTemplateList(String tplCategory, String tplWebType) {
-        String dbType = GenConfig.getDbType().trim();
+        String dbType = GenConfig.getDbType().toLowerCase().trim();
         String useWebType = getUseWebTypeFromTplWebType(tplWebType);
         List<String> templates = new ArrayList<>();
         templates.add("vm/java/domain.java.vm");
@@ -152,12 +152,11 @@ public class VelocityUtils {
 
     private static String getUseWebTypeFromTplWebType(String tplWebType) {
         if (tplWebType == null) tplWebType = "element-plus";
-        String useWebType = switch (tplWebType) {
+        return switch (tplWebType) {
             case "element-ui" -> "vm/vue";
             case "element-plus" -> "vm/vue/v3";
             default -> throw new IllegalArgumentException("Unknown web type: " + tplWebType);
         };
-        return useWebType;
     }
 
     /**

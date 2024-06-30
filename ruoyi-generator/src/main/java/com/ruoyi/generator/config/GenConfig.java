@@ -80,7 +80,7 @@ public class GenConfig {
     }
 
     @Value("${dbType}")
-    public static void setDbType(String dbType) {
+    public void setDbType(String dbType) {
         GenConfig.dbType = dbType;
     }
 }
