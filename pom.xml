@@ -28,6 +28,7 @@
         <fastjson.version>2.0.50</fastjson.version>
         <oshi.version>6.6.0</oshi.version>
         <commons.io.version>2.16.1</commons.io.version>
+        <commons.compress.version>1.26.2</commons.compress.version>
         <poi.version>5.2.5</poi.version>
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.9.1</jwt.version>
@@ -136,6 +137,18 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-compress</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons.compress.version}</version>
             </dependency>
 
             <!-- velocity代码生成使用模板 -->
