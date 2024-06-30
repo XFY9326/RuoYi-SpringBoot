@@ -114,7 +114,7 @@ public class SecurityConfig {
                             // 静态资源，可匿名访问
                             .requestMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
                             .requestMatchers("/webjars/**", "/druid/**").permitAll()
-                            .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/*/api-docs/**").permitAll()
+                            .requestMatchers("/api-docs/**").permitAll()
                             // 除上面外的所有请求全部需要鉴权认证
                             .anyRequest().authenticated();
                 })
