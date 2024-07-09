@@ -245,6 +245,7 @@ create table
         path varchar(200) default '',
         component varchar(255) default null,
         query varchar(255) default null,
+        route_name varchar(50) default '',
         is_frame number (1) default 1,
         is_cache number (1) default 0,
         menu_type char(1) default '',
@@ -276,6 +277,8 @@ comment on column sys_menu.path is '请求地址';
 comment on column sys_menu.component is '路由地址';
 
 comment on column sys_menu.query is '路由参数';
+
+comment on column sys_menu.route_name is '路由名称';
 
 comment on column sys_menu.is_frame is '是否为外链（0是 1否）';
 
