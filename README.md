@@ -102,3 +102,7 @@ gen:
     <version>${oracle.version}</version>
 </dependency>
 ```
+
+## Swagger
+
+由于使用SpringDoc需要反向代理支持，所有Swagger相关的Url都被定位到`/api-docs`路径下
