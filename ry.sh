@@ -1,86 +1,300 @@
 #!/bin/sh
-# ./ry.sh start 启动 stop 停止 restart 重启 status 状态
-AppName=ruoyi-admin.jar
 
-# JVM参数
-JVM_OPTS="-Dname=$AppName  -Duser.timezone=Asia/Shanghai -Xms512m -Xmx1024m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
-APP_HOME=`pwd`
-LOG_PATH=$APP_HOME/logs/$AppName.log
+set -ue
 
-if [ "$1" = "" ];
-then
-    echo -e "\033[0;31m 未输入操作名 \033[0m  \033[0;34m {start|stop|restart|status} \033[0m"
-    exit 1
-fi
+SCRIPT_DIR=$(
+  cd -- "$(dirname "$0")" >/dev/null 2>&1
+  pwd -P
+)
+PROJECT_PATH=$(realpath "${SCRIPT_DIR}")
 
-if [ "$AppName" = "" ];
-then
-    echo -e "\033[0;31m 未输入应用名 \033[0m"
-    exit 1
-fi
+JAVA_BIN="java"
 
-function start()
-{
-    PID=`ps -ef |grep java|grep $AppName|grep -v grep|awk '{print $2}'`
+JAR_FILE_NAME="ruoyi-admin.jar"
+JAR_PATH="${PROJECT_PATH}/${JAR_FILE_NAME}"
 
-	if [ x"$PID" != x"" ]; then
-	    echo "$AppName is running..."
-	else
-		nohup java $JVM_OPTS -jar $AppName > /dev/null 2>&1 &
-		echo "Start $AppName success..."
-	fi
-}
+CONFIG_DIR_NAME="config"
+CONFIG_DIR_PATH="${PROJECT_PATH}/${CONFIG_DIR_NAME}"
 
-function stop()
-{
-    echo "Stop $AppName"
+JVM_ARGS="-Djava.security.egd=file:/dev/./urandom Xms512m -Xmx512m"
+APP_ARGS="--spring.config.location=file:${CONFIG_DIR_PATH}/"
 
-	PID=""
-	query(){
-		PID=`ps -ef |grep java|grep $AppName|grep -v grep|awk '{print $2}'`
-	}
+BACKUP_DIR_PATH="${PROJECT_PATH}/backup"
+ROLLBACK_DIR_PATH="${PROJECT_PATH}/rollback"
+PID_FILE="${PROJECT_PATH}/app.pid"
+WAIT_SECONDS=10
 
-	query
-	if [ x"$PID" != x"" ]; then
-		kill -TERM $PID
-		echo "$AppName (pid:$PID) exiting..."
-		while [ x"$PID" != x"" ]
-		do
-			sleep 1
-			query
-		done
-		echo "$AppName exited."
-	else
-		echo "$AppName already stopped."
-	fi
-}
+cd "${PROJECT_PATH}"
+echo "Current work dir: ${PROJECT_PATH}"
 
-function restart()
-{
-    stop
-    sleep 2
-    start
-}
+is_running() {
+  cd "${PROJECT_PATH}"
 
-function status()
-{
-    PID=`ps -ef |grep java|grep $AppName|grep -v grep|wc -l`
-    if [ $PID != 0 ];then
-        echo "$AppName is running..."
+  if [ -f "${PID_FILE}" ]; then
+    PID=$(cat "${PID_FILE}")
+    if [ -n "${PID}" ] && ps -p "${PID}" >/dev/null; then
+      return 0
     else
-        echo "$AppName is not running..."
+      rm -rf "${PID_FILE}"
     fi
+  fi
+  return 1
 }
 
-case $1 in
-    start)
-    start;;
-    stop)
-    stop;;
-    restart)
-    restart;;
-    status)
-    status;;
-    *)
+not_running_process_check() {
+  JAR_PID="$(pgrep -f "${JAR_FILE_NAME}" || true)"
+  if [ -n "${JAR_PID}" ]; then
+    echo "Server PID file not found, but it may running at PID ${JAR_PID}"
+    echo "Current JVM processes:"
+    jps -l
+    return 1
+  else
+    echo "Server not started yet"
+    return 0
+  fi
+}
 
+start() {
+  cd "${PROJECT_PATH}"
+
+  if is_running; then
+    PID=$(cat "${PID_FILE}")
+    echo "Server (pid ${PID}) already started"
+    return 0
+  fi
+
+  if [ ! -f "${JAR_PATH}" ]; then
+    echo "Can't find file ${JAR_PATH}"
+    exit 1
+  fi
+
+  echo "Starting server"
+  nohup $JAVA_BIN "${JVM_ARGS}" -jar "${JAR_PATH}" "${APP_ARGS}" >/dev/null 2>&1 &
+
+  echo $! >"${PID_FILE}"
+
+  sleep 1
+
+  WAIT_COUNTER=0
+  while ! is_running; do
+    if [ "${WAIT_COUNTER}" -ge "${WAIT_SECONDS}" ]; then
+      echo "Server launch failed!"
+      exit 1
+    fi
+    echo "Waiting for server launching ..."
+    sleep 1
+    WAIT_COUNTER=$((WAIT_COUNTER + 1))
+  done
+
+  PID=$(cat "${PID_FILE}")
+  echo "Server (pid ${PID}) started"
+  return 0
+}
+
+stop() {
+  cd "${PROJECT_PATH}"
+
+  if ! is_running; then
+    not_running_process_check
+    return $?
+  fi
+
+  if [ -f "${PID_FILE}" ]; then
+    PID=$(cat "${PID_FILE}")
+
+    echo "Killing server (pid ${PID})"
+    kill -15 "${PID}"
+
+    sleep 1
+
+    WAIT_COUNTER=0
+    while is_running; do
+      if [ "${WAIT_COUNTER}" -ge "${WAIT_SECONDS}" ]; then
+        echo "Server kill failed!"
+        exit 1
+      fi
+      echo "Waiting for server killing ..."
+      sleep 1
+      WAIT_COUNTER=$((WAIT_COUNTER + 1))
+    done
+
+    rm -rf "${PID_FILE}"
+
+    echo "Server stopped"
+  fi
+}
+
+status() {
+  if is_running; then
+    echo "Server is running"
+  else
+    not_running_process_check
+    return $?
+  fi
+  return 0
+}
+
+backup() {
+  cd "${PROJECT_PATH}"
+
+  BACKUP_TAG="$1"
+  echo "Backup tag: ${BACKUP_TAG}"
+
+  BACKUP_TAG_PATH="${BACKUP_DIR_PATH}/${BACKUP_TAG}"
+  mkdir -p "${BACKUP_TAG_PATH}"
+
+  echo "Backup to: ${BACKUP_TAG_PATH}"
+  if [ -d "${BACKUP_TAG_PATH}" ]; then
+    if [ -z "$(ls -A "${BACKUP_TAG_PATH}")" ]; then
+      echo "Reuse exist but empty backup dir"
+    else
+      echo "Backup tag already exists"
+      exit 1
+    fi
+  fi
+
+  echo "Backup configs: ${CONFIG_DIR_PATH}"
+  if [ -d "${CONFIG_DIR_PATH}" ]; then
+    cp -rfp "${CONFIG_DIR_PATH}" "${BACKUP_TAG_PATH}/"
+  else
+    echo "Can't find dir ${CONFIG_DIR_PATH}"
+  fi
+
+  echo "Backup jar: ${JAR_PATH}"
+  if [ -f "${JAR_PATH}" ]; then
+    cp -fp "${JAR_PATH}" "${BACKUP_TAG_PATH}/"
+  else
+    echo "Can't find file ${JAR_PATH}"
+  fi
+
+  if [ -z "$(ls -A "${BACKUP_TAG_PATH}")" ]; then
+    echo "No backup files"
+    rm -rf "${BACKUP_TAG_PATH}"
+    return 0
+  fi
+
+  echo "Packaging backup files ..."
+  BACKUP_PKG_PATH="${BACKUP_DIR_PATH}/${BACKUP_TAG}.tar.gz"
+
+  cd "${BACKUP_DIR_PATH}"
+  tar -zcf "${BACKUP_PKG_PATH}" "${BACKUP_TAG}"
+  cd "${PROJECT_PATH}"
+
+  echo "Cleaning temp files"
+  rm -rf "${BACKUP_TAG_PATH}"
+
+  if [ -f "${BACKUP_PKG_PATH}" ]; then
+    echo "Backup success: ${BACKUP_PKG_PATH}"
+  else
+    echo "Backup failed: backup package not found"
+  fi
+}
+
+rollback() {
+  cd "${PROJECT_PATH}"
+
+  BACKUP_TAG="$1"
+  echo "Backup tag to rollback: ${BACKUP_TAG}"
+
+  ROLLBACK_PKG_PATH="${BACKUP_DIR_PATH}/${BACKUP_TAG}.tar.gz"
+  if [ -f "${ROLLBACK_PKG_PATH}" ]; then
+    echo "Loading backup package"
+    cd "${BACKUP_DIR_PATH}"
+    tar -xzf "${ROLLBACK_PKG_PATH}"
+    cd "${PROJECT_PATH}"
+
+    BACKUP_TAG_PATH="${BACKUP_DIR_PATH}/${BACKUP_TAG}"
+    if [ -z "$(ls -A "${BACKUP_TAG_PATH}")" ]; then
+      echo "No rollback files"
+      rm -rf "${BACKUP_TAG_PATH}"
+      return 0
+    fi
+
+    if [ -d "${ROLLBACK_DIR_PATH}" ]; then
+      rm -rf "${ROLLBACK_DIR_PATH}"
+    fi
+    mkdir -p "${ROLLBACK_DIR_PATH}"
+
+    ROLLBACK_CONFIG_PATH="${BACKUP_TAG_PATH}/${CONFIG_DIR_NAME}"
+    echo "Rollback config files: ${ROLLBACK_CONFIG_PATH}"
+    if [ -d "${ROLLBACK_CONFIG_PATH}" ]; then
+      mv "${CONFIG_DIR_PATH}" "${ROLLBACK_DIR_PATH}/"
+      mv "${ROLLBACK_CONFIG_PATH}" "${CONFIG_DIR_PATH}"
+    else
+      echo "No configs to rollback"
+    fi
+
+    ROLLBACK_JAR_PATH="${BACKUP_TAG_PATH}/${JAR_FILE_NAME}"
+    echo "Rollback jar file: ${ROLLBACK_JAR_PATH}"
+    if [ -f "${ROLLBACK_JAR_PATH}" ]; then
+      mv "${JAR_PATH}" "${ROLLBACK_DIR_PATH}/"
+      mv "${ROLLBACK_JAR_PATH}" "${JAR_PATH}"
+    else
+      echo "No jar file to rollback"
+    fi
+
+    echo "Cleaning temp files"
+    rm -rf "${BACKUP_TAG_PATH}"
+
+    echo "Rollback success: ${BACKUP_TAG}"
+    echo "Please restart server"
+  else
+    echo "Can't find rollback package ${BACKUP_TAG}!"
+    exit 1
+  fi
+}
+
+print_help() {
+  echo "Usage: $0 [COMMAND] [OPTION...]"
+  echo "Commands:"
+  echo "  start           Start server"
+  echo "  stop            Stop server"
+  echo "  restart         Restart server"
+  echo "  status          Print server status"
+  echo "  backup [TAG]    Backup server as tag"
+  echo "  rollback [TAG]  Rollback server from tag"
+}
+
+if [ -z "${1+x}" ]; then
+  print_help "$0"
+  exit 1
+fi
+
+case "$1" in
+start)
+  start
+  ;;
+stop)
+  stop
+  ;;
+status)
+  status
+  ;;
+restart)
+  stop
+  start
+  ;;
+backup)
+  if [ -z "${2+x}" ]; then
+    echo "Empty backup tag!"
+    exit 1
+  else
+    backup "$2"
+  fi
+  ;;
+rollback)
+  if [ -z "${2+x}" ]; then
+    echo "Empty backup tag to rollback!"
+    exit 1
+  else
+    rollback "$2"
+  fi
+  ;;
+*)
+  echo "Unknown command: $1"
+  print_help "$0"
+  exit 1
+  ;;
 esac
+
+exit 0
