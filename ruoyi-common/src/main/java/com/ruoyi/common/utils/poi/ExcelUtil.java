@@ -62,11 +62,11 @@ public class ExcelUtil<T> {
     /**
      * 用于dictType属性数据存储，避免重复查缓存
      */
-    public Map<String, String> sysDictMap = new HashMap<>();
+    public final Map<String, String> sysDictMap = new HashMap<>();
     /**
      * 实体对象
      */
-    public Class<T> clazz;
+    public final Class<T> clazz;
     /**
      * 需要排除列属性
      */

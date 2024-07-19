@@ -35,7 +35,7 @@ public class FileUploadUtils {
     /**
      * 最大文件上传大小
      */
-    private static long maxFileSize = MultipartConfig.getMaxFileSize();
+    private static final long maxFileSize = MultipartConfig.getMaxFileSize();
 
     public static String getDefaultBaseDir() {
         return defaultBaseDir;
