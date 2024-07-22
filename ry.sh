@@ -126,7 +126,8 @@ stop() {
 
 status() {
   if is_running; then
-    echo "Server is running"
+    PID=$(cat "${PID_FILE}")
+    echo "Server is running (pid ${PID})"
   else
     not_running_process_check
     return $?
