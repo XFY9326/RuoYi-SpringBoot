@@ -71,6 +71,15 @@ spring:
     restart:
       # 热部署开关
       enabled: true
+  # Quartz
+  quartz:
+    # JDBC持久化
+    job-store-type: jdbc
+    # 关闭时等待任务完成
+    wait-for-jobs-to-complete-on-shutdown: true
+    jdbc:
+      # 手动初始化
+      initialize-schema: never
   data:
     # redis 配置
     redis:
