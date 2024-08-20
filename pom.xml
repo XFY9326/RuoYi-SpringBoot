@@ -9,8 +9,6 @@
     <version>3.8.8</version>
 
     <name>ruoyi</name>
-    <url>https://www.ruoyi.vip</url>
-    <description>若依管理系统</description>
 
     <properties>
         <ruoyi.version>3.8.8</ruoyi.version>
@@ -18,10 +16,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
         <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
-        <spring-framework.version>6.1.8</spring-framework.version>
         <druid.version>1.2.23</druid.version>
         <bitwalker.version>1.21</bitwalker.version>
-        <swagger.version>2.5.0</swagger.version>
         <kaptcha.version>2.3.3</kaptcha.version>
         <pagehelper.boot.version>2.1.0</pagehelper.boot.version>
         <mybatis.version>3.0.3</mybatis.version>
@@ -32,50 +28,45 @@
         <poi.version>5.2.5</poi.version>
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.9.1</jwt.version>
+        <google.findbugs.version>3.0.1</google.findbugs.version>
+        <javax.xml.version>2.3.1</javax.xml.version>
+        <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
+        <springdoc.version>2.5.0</springdoc.version>
+        <mysql.version>8.4.0</mysql.version>
         <oracle.version>10.2.0.4.0</oracle.version>
     </properties>
+
+    <!-- SpringBoot -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.2</version>
+        <relativePath/>
+    </parent>
 
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
 
-            <!-- SpringFramework的依赖配置 -->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-framework-bom</artifactId>
-                <version>${spring-framework.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <!-- SpringBoot的依赖配置 -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>3.3.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
             <!-- MySQL配置 -->
             <dependency>
                 <groupId>com.mysql</groupId>
                 <artifactId>mysql-connector-j</artifactId>
-                <version>8.4.0</version>
+                <version>${mysql.version}</version>
             </dependency>
 
             <!-- JavaX XML -->
             <dependency>
                 <groupId>javax.xml.bind</groupId>
                 <artifactId>jaxb-api</artifactId>
-                <version>2.3.1</version>
+                <version>${javax.xml.version}</version>
             </dependency>
 
             <!-- Jakarta EE -->
             <dependency>
                 <groupId>jakarta.servlet</groupId>
                 <artifactId>jakarta.servlet-api</artifactId>
-                <version>6.0.0</version>
+                <version>${jakarta.servlet.version}</version>
             </dependency>
 
             <!-- 阿里数据库连接池 -->
@@ -105,6 +96,7 @@
                 </exclusions>
             </dependency>
 
+            <!-- mybatis -->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
@@ -116,13 +108,6 @@
                 <groupId>com.github.oshi</groupId>
                 <artifactId>oshi-core</artifactId>
                 <version>${oshi.version}</version>
-            </dependency>
-
-            <!-- Swagger3依赖 -->
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>${swagger.version}</version>
             </dependency>
 
             <!-- io常用工具类 -->
@@ -179,11 +164,18 @@
                 <version>${kaptcha.version}</version>
             </dependency>
 
+            <!-- Swagger3 -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
             <!-- Swagger findbugs -->
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>annotations</artifactId>
-                <version>3.0.1</version>
+                <version>${google.findbugs.version}</version>
             </dependency>
 
             <!-- 定时任务-->
