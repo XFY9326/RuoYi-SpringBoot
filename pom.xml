@@ -22,9 +22,9 @@
         <pagehelper.boot.version>2.1.0</pagehelper.boot.version>
         <mybatis.version>3.0.3</mybatis.version>
         <fastjson.version>2.0.52</fastjson.version>
-        <oshi.version>6.6.0</oshi.version>
+        <oshi.version>6.6.3</oshi.version>
         <commons.io.version>2.16.1</commons.io.version>
-        <commons.compress.version>1.27.0</commons.compress.version>
+        <commons.compress.version>1.27.1</commons.compress.version>
         <poi.version>5.3.0</poi.version>
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.12.6</jwt.version>

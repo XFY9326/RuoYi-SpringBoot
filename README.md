@@ -106,3 +106,7 @@ gen:
 ## Swagger
 
 由于使用SpringDoc需要反向代理支持，所有Swagger相关的Url都被定位到`/api-docs`路径下
+
+## Jwt
+
+**使用前请务必修改`application.yml`中的`token.secrect`值为自定义的值**
