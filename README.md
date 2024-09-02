@@ -5,7 +5,7 @@
 原始仓库: https://github.com/yangzongzhuan/RuoYi-Vue  
 Oracle部分: https://github.com/yangzongzhuan/RuoYi-Oracle
 
-- RuoYi-Vue基于Commit: 3ef6000
+- RuoYi-Vue基于Commit: 8a0a3a0
 - RuoYi-Oracle基于Commit: 7227cdf (仅限数据库相关部分)
 
 ## 前端
