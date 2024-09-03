@@ -16,7 +16,7 @@ JAR_PATH="${PROJECT_PATH}/${JAR_FILE_NAME}"
 CONFIG_DIR_NAME="config"
 CONFIG_DIR_PATH="${PROJECT_PATH}/${CONFIG_DIR_NAME}"
 
-JVM_ARGS="-Djava.security.egd=file:/dev/./urandom Xms512m -Xmx512m"
+JVM_ARGS="-Djava.security.egd=file:/dev/./urandom Xms512m -Xmx2048m"
 APP_ARGS="--spring.config.location=file:${CONFIG_DIR_PATH}/"
 
 BACKUP_DIR_PATH="${PROJECT_PATH}/backup"
