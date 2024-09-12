@@ -19,10 +19,15 @@ CONFIG_DIR_PATH="${PROJECT_PATH}/${CONFIG_DIR_NAME}"
 JVM_ARGS="-Djava.security.egd=file:/dev/./urandom Xms512m -Xmx2048m"
 APP_ARGS="--spring.config.location=file:${CONFIG_DIR_PATH}/"
 
+HEALTH_CHECK_URL="http://127.0.0.1:8080/health/check?DETECT=DETECT"
+HEALTH_CHECK_INTERVAL_SECONDS=3
+HEALTH_CHECK_TOTAL_ATTEMPTS=120
+
 BACKUP_DIR_PATH="${PROJECT_PATH}/backup"
 ROLLBACK_DIR_PATH="${PROJECT_PATH}/rollback"
 PID_FILE="${PROJECT_PATH}/app.pid"
-WAIT_SECONDS=10
+PID_CHECK_INTERVAL_SECONDS=1
+PID_CHECK_TOTAL_ATTEMPTS=10
 
 cd "${PROJECT_PATH}"
 echo "Current work dir: ${PROJECT_PATH}"
@@ -38,6 +43,25 @@ is_running() {
       rm -rf "${PID_FILE}"
     fi
   fi
+  return 1
+}
+
+check_health() {
+  echo "Checking server health"
+  ATTEMPT=1
+  while [ $ATTEMPT -le $HEALTH_CHECK_TOTAL_ATTEMPTS ]; do
+    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_CHECK_URL" || true)
+
+    if [ "$RESPONSE" -eq 200 ]; then
+        echo "Health check passed"
+        return 0
+    fi
+
+    ATTEMPT=$((ATTEMPT + 1))
+    sleep $HEALTH_CHECK_INTERVAL_SECONDS
+  done
+
+  echo "Health check failed!"
   return 1
 }
 
@@ -75,20 +99,23 @@ start() {
 
   sleep 1
 
-  WAIT_COUNTER=0
+  ATTEMPT=0
   while ! is_running; do
-    if [ "${WAIT_COUNTER}" -ge "${WAIT_SECONDS}" ]; then
+    if [ "${ATTEMPT}" -ge "${PID_CHECK_TOTAL_ATTEMPTS}" ]; then
       echo "Server launch failed!"
       exit 1
     fi
     echo "Waiting for server launching ..."
-    sleep 1
-    WAIT_COUNTER=$((WAIT_COUNTER + 1))
+    sleep $PID_CHECK_INTERVAL_SECONDS
+    ATTEMPT=$((ATTEMPT + 1))
   done
 
   PID=$(cat "${PID_FILE}")
   echo "Server (pid ${PID}) started"
-  return 0
+
+  check_health
+
+  return $?
 }
 
 stop() {
@@ -107,15 +134,15 @@ stop() {
 
     sleep 1
 
-    WAIT_COUNTER=0
+    ATTEMPT=0
     while is_running; do
-      if [ "${WAIT_COUNTER}" -ge "${WAIT_SECONDS}" ]; then
+      if [ "${ATTEMPT}" -ge "${PID_CHECK_TOTAL_ATTEMPTS}" ]; then
         echo "Server kill failed!"
         exit 1
       fi
       echo "Waiting for server killing ..."
-      sleep 1
-      WAIT_COUNTER=$((WAIT_COUNTER + 1))
+      sleep $PID_CHECK_INTERVAL_SECONDS
+      ATTEMPT=$((ATTEMPT + 1))
     done
 
     rm -rf "${PID_FILE}"
@@ -128,11 +155,12 @@ status() {
   if is_running; then
     PID=$(cat "${PID_FILE}")
     echo "Server is running (pid ${PID})"
+    check_health
+    return $?
   else
     not_running_process_check
     return $?
   fi
-  return 0
 }
 
 backup() {
