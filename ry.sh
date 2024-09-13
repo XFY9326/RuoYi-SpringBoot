@@ -170,8 +170,6 @@ backup() {
   echo "Backup tag: ${BACKUP_TAG}"
 
   BACKUP_TAG_PATH="${BACKUP_DIR_PATH}/${BACKUP_TAG}"
-  mkdir -p "${BACKUP_TAG_PATH}"
-
   echo "Backup to: ${BACKUP_TAG_PATH}"
   if [ -d "${BACKUP_TAG_PATH}" ]; then
     if [ -z "$(ls -A "${BACKUP_TAG_PATH}")" ]; then
@@ -180,6 +178,8 @@ backup() {
       echo "Backup tag already exists"
       exit 1
     fi
+  else
+    mkdir -p "${BACKUP_TAG_PATH}"
   fi
 
   echo "Backup configs: ${CONFIG_DIR_PATH}"
