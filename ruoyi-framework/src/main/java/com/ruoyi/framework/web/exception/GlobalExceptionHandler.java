@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.util.unit.DataSize;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
@@ -55,8 +56,10 @@ public class GlobalExceptionHandler {
      * 上传文件过大
      */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public AjaxResult handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+    public AjaxResult handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e, HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
         String dataSize = DataSize.ofBytes(e.getMaxUploadSize()).toString();
+        log.error("请求地址'{}', 请求上传的文件大小超过'{}'", requestURI, e.getMaxUploadSize());
         return AjaxResult.error(
                 e.getStatusCode().value(),
                 String.format("文件大小超过%s，无法上传", dataSize)
@@ -133,7 +136,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Object handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
-        String message = e.getBindingResult().getFieldError().getDefaultMessage();
+        FieldError fieldError = e.getBindingResult().getFieldError();
+        String message = fieldError == null ? null : fieldError.getDefaultMessage();
         return AjaxResult.error(message);
     }
 
