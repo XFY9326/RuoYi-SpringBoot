@@ -19,7 +19,7 @@ CONFIG_DIR_PATH="${PROJECT_PATH}/${CONFIG_DIR_NAME}"
 JVM_ARGS="-Djava.security.egd=file:/dev/./urandom Xms512m -Xmx2048m"
 APP_ARGS="--spring.config.location=file:${CONFIG_DIR_PATH}/"
 
-HEALTH_CHECK_URL="http://127.0.0.1:8080/health/check?DETECT=DETECT"
+HEALTH_CHECK_URL="http://127.0.0.1:8080/health/check"
 HEALTH_CHECK_INTERVAL_SECONDS=3
 HEALTH_CHECK_TOTAL_ATTEMPTS=120
 
@@ -52,7 +52,7 @@ check_health() {
   while [ $ATTEMPT -le $HEALTH_CHECK_TOTAL_ATTEMPTS ]; do
     RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_CHECK_URL" || true)
 
-    if [ "$RESPONSE" -eq 200 ]; then
+    if [ "$RESPONSE" -eq "204" ]; then
         echo "Health check passed"
         return 0
     fi

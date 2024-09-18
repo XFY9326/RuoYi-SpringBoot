@@ -62,7 +62,7 @@ public class SysUser extends BaseEntity {
     /**
      * 用户性别
      */
-    @Excel(name = "用户性别", readConverterExp = "0=男,1=女,2=未知")
+    @Excel(name = "用户性别", dictType = "sys_user_sex")
     private String sex;
 
     /**

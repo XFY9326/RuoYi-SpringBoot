@@ -1,19 +1,16 @@
 package com.ruoyi.web.controller.health;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/health")
 public class HealthCheckController {
 
     @GetMapping("/check")
-    public ResponseEntity<?> healthCheck(@RequestParam("DETECT") String detect) {
-        if ("DETECT".equalsIgnoreCase(detect)) {
-            return ResponseEntity.ok("SUCCEED");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FAILED");
-        }
+    public ResponseEntity<?> healthCheck() {
+        return ResponseEntity.noContent().build();
     }
 }
