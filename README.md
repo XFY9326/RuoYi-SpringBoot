@@ -17,6 +17,8 @@ Oracle部分: https://github.com/yangzongzhuan/RuoYi-Oracle
 - 增加Oracle数据库支持
 - 全部依赖升级
 - 代码格式化以及部分修复
+- 优化自动部署管理脚本
+- 增加健康探活接口
 
 ## 默认用户
 
