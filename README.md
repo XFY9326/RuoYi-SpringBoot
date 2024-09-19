@@ -25,6 +25,32 @@ Oracle部分: https://github.com/yangzongzhuan/RuoYi-Oracle
 - 用户名：admin
 - 密码：admin123
 
+## 部署与运行
+
+使用Maven的`package`命令可以打包整个项目，完整的打包文件为`ruoyi-admin/target/ruoyi-admin.jar`  
+将`ry.sh`脚本和`ruoyi-admin.jar`放在同一目录即可使用脚本控制服务
+
+```shell
+# 启动服务
+# 后端默认地址 http://localhost:8080
+ry.sh start
+
+# 停止服务
+ry.sh stop
+
+# 查看服务运行状态
+ry.sh status
+
+# 重启服务
+ry.sh restart
+
+# 备份服务为001
+ry.sh backup 001
+
+# 从001的备份回滚服务
+ry.sh rollback 001
+```
+
 ## 数据库
 
 ### MySQL
