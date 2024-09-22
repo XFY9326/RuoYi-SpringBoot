@@ -5,8 +5,8 @@
 原始仓库: https://github.com/yangzongzhuan/RuoYi-Vue  
 Oracle部分: https://github.com/yangzongzhuan/RuoYi-Oracle
 
-- RuoYi-Vue基于Commit: 22a795d
-- RuoYi-Oracle基于Commit: cafd8ab (仅限数据库相关部分)
+- RuoYi-Vue基于Commit: 5fad997
+- RuoYi-Oracle基于Commit: 9c88a3e (仅限数据库相关部分)
 
 ## 前端
 
@@ -33,22 +33,22 @@ Oracle部分: https://github.com/yangzongzhuan/RuoYi-Oracle
 ```shell
 # 启动服务
 # 后端默认地址 http://localhost:8080
-ry.sh start
+sh ry.sh start
 
 # 停止服务
-ry.sh stop
+sh ry.sh stop
 
 # 查看服务运行状态
-ry.sh status
+sh ry.sh status
 
 # 重启服务
-ry.sh restart
+sh ry.sh restart
 
 # 备份服务为001
-ry.sh backup 001
+sh ry.sh backup 001
 
 # 从001的备份回滚服务
-ry.sh rollback 001
+sh ry.sh rollback 001
 ```
 
 ## 数据库
