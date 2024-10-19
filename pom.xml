@@ -24,9 +24,9 @@
         <fastjson.version>2.0.53</fastjson.version>
         <oshi.version>6.6.5</oshi.version>
         <commons.io.version>2.17.0</commons.io.version>
+        <commons.text.version>1.12.0</commons.text.version>
         <commons.lang3.version>3.17.0</commons.lang3.version>
         <commons.compress.version>1.27.1</commons.compress.version>
-        <jackson.version>2.18.0</jackson.version>
         <poi.version>5.3.0</poi.version>
         <snakeyaml.version>2.3</snakeyaml.version>
         <velocity.version>2.4</velocity.version>
@@ -50,6 +50,15 @@
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
+
+            <!-- Jackson -->
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>2.18.0</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
 
             <!-- MySQL配置 -->
             <dependency>
@@ -147,6 +156,13 @@
                 <version>${commons.lang3.version}</version>
             </dependency>
 
+            <!-- Apache commons text -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons.text.version}</version>
+            </dependency>
+
             <!-- Apache commons compress -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -159,13 +175,6 @@
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity-engine-core</artifactId>
                 <version>${velocity.version}</version>
-            </dependency>
-
-            <!-- JSON工具类 -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
             </dependency>
 
             <!-- 阿里JSON解析器 -->

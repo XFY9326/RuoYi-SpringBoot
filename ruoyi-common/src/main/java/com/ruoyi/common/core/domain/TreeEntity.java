@@ -1,5 +1,6 @@
 package com.ruoyi.common.core.domain;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * @author ruoyi
  */
 public class TreeEntity extends BaseEntity {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

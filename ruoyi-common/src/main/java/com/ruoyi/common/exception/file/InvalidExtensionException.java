@@ -1,5 +1,6 @@
 package com.ruoyi.common.exception.file;
 
+import java.io.Serial;
 import java.util.Arrays;
 
 /**
@@ -8,6 +9,7 @@ import java.util.Arrays;
  * @author ruoyi
  */
 public class InvalidExtensionException extends FileUploadException {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final String[] allowedExtension;
@@ -34,6 +36,7 @@ public class InvalidExtensionException extends FileUploadException {
     }
 
     public static class InvalidImageExtensionException extends InvalidExtensionException {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         public InvalidImageExtensionException(String[] allowedExtension, String extension, String filename) {
@@ -42,6 +45,7 @@ public class InvalidExtensionException extends FileUploadException {
     }
 
     public static class InvalidFlashExtensionException extends InvalidExtensionException {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         public InvalidFlashExtensionException(String[] allowedExtension, String extension, String filename) {
@@ -50,6 +54,7 @@ public class InvalidExtensionException extends FileUploadException {
     }
 
     public static class InvalidMediaExtensionException extends InvalidExtensionException {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         public InvalidMediaExtensionException(String[] allowedExtension, String extension, String filename) {
@@ -58,6 +63,7 @@ public class InvalidExtensionException extends FileUploadException {
     }
 
     public static class InvalidVideoExtensionException extends InvalidExtensionException {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         public InvalidVideoExtensionException(String[] allowedExtension, String extension, String filename) {

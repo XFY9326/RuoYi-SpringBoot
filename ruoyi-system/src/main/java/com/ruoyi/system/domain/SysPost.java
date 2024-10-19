@@ -9,6 +9,8 @@ import jakarta.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serial;
+
 
 /**
  * 岗位表 sys_post
@@ -16,6 +18,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author ruoyi
  */
 public class SysPost extends BaseEntity {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

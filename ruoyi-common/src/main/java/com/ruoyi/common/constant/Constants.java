@@ -33,6 +33,7 @@ public class Constants {
     /**
      * http请求
      */
+    @SuppressWarnings("HttpUrlsUsage")
     public static final String HTTP = "http://";
 
     /**
@@ -83,12 +84,12 @@ public class Constants {
     /**
      * 角色权限分隔符
      */
-    public static final String ROLE_DELIMETER = ",";
+    public static final String ROLE_DELIMITER = ",";
 
     /**
      * 权限标识分隔符
      */
-    public static final String PERMISSION_DELIMETER = ",";
+    public static final String PERMISSION_DELIMITER = ",";
 
     /**
      * 验证码有效期（分钟）
@@ -104,6 +105,11 @@ public class Constants {
      * 令牌前缀
      */
     public static final String TOKEN_PREFIX = "Bearer ";
+
+    /**
+     * Cookies令牌键
+     */
+    public static final String TOKEN_COOKIES_KEY = "token";
 
     /**
      * 令牌前缀

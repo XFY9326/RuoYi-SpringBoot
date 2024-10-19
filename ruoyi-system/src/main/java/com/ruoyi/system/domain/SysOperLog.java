@@ -5,6 +5,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Excel.ColumnType;
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.io.Serial;
 import java.util.Date;
 
 /**
@@ -13,6 +14,7 @@ import java.util.Date;
  * @author ruoyi
  */
 public class SysOperLog extends BaseEntity {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

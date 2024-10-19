@@ -2,6 +2,7 @@ package com.ruoyi.common.exception.file;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.Serial;
 
 /**
  * 文件上传异常类
@@ -10,6 +11,7 @@ import java.io.PrintWriter;
  */
 public class FileUploadException extends Exception {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final Throwable cause;

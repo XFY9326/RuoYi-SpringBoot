@@ -9,12 +9,15 @@ import jakarta.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serial;
+
 /**
  * 字典数据表 sys_dict_data
  *
  * @author ruoyi
  */
 public class SysDictData extends BaseEntity {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

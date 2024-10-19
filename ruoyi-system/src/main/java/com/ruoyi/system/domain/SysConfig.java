@@ -8,12 +8,15 @@ import jakarta.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serial;
+
 /**
  * 参数配置表 sys_config
  *
  * @author ruoyi
  */
 public class SysConfig extends BaseEntity {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

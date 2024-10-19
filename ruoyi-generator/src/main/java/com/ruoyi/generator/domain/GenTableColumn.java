@@ -4,12 +4,15 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.utils.StringUtils;
 import jakarta.validation.constraints.NotBlank;
 
+import java.io.Serial;
+
 /**
  * 代码生成业务字段表 gen_table_column
  *
  * @author ruoyi
  */
 public class GenTableColumn extends BaseEntity {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serial;
 import java.util.Set;
 
 /**
@@ -17,6 +18,7 @@ import java.util.Set;
  * @author ruoyi
  */
 public class SysRole extends BaseEntity {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

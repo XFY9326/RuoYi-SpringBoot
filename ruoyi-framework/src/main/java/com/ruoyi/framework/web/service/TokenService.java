@@ -13,6 +13,7 @@ import eu.bitwalker.useragentutils.UserAgent;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,9 +191,18 @@ public class TokenService {
     private String getToken(HttpServletRequest request) {
         String token = request.getHeader(header);
         if (StringUtils.isNotEmpty(token) && token.startsWith(Constants.TOKEN_PREFIX)) {
-            token = token.replace(Constants.TOKEN_PREFIX, "");
+            return token.replace(Constants.TOKEN_PREFIX, "");
+        } else {
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (Constants.TOKEN_COOKIES_KEY.equalsIgnoreCase(cookie.getName())) {
+                        return cookie.getValue();
+                    }
+                }
+            }
         }
-        return token;
+        return null;
     }
 
     private String getTokenKey(String uuid) {

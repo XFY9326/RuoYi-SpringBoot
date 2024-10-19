@@ -7,12 +7,15 @@ import jakarta.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serial;
+
 /**
  * 通知公告表 sys_notice
  *
  * @author ruoyi
  */
 public class SysNotice extends BaseEntity {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

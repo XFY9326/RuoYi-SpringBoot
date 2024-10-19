@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @author ruoyi
  */
 public class SysDept extends BaseEntity {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
