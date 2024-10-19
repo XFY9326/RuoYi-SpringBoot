@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 public class MultipartConfig {
     private static MultipartProperties multipartProperties;
 
+    public static long getMaxFileSize() {
+        return multipartProperties.getMaxFileSize().toBytes();
+    }
+
     @Autowired
     public void setMultipartProperties(MultipartProperties multipartProperties) {
         MultipartConfig.multipartProperties = multipartProperties;
-    }
-
-    public static long getMaxFileSize() {
-        return multipartProperties.getMaxFileSize().toBytes();
     }
 }

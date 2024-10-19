@@ -27,15 +27,14 @@ public class FileUploadUtils {
      * 默认的文件名最大长度 100
      */
     public static final int DEFAULT_FILE_NAME_LENGTH = 100;
-
-    /**
-     * 默认上传的地址
-     */
-    private static String defaultBaseDir = RuoYiConfig.getProfile();
     /**
      * 最大文件上传大小
      */
     private static final long maxFileSize = MultipartConfig.getMaxFileSize();
+    /**
+     * 默认上传的地址
+     */
+    private static String defaultBaseDir = RuoYiConfig.getProfile();
 
     public static String getDefaultBaseDir() {
         return defaultBaseDir;

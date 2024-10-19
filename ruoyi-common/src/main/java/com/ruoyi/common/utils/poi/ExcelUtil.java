@@ -68,6 +68,10 @@ public class ExcelUtil<T> {
      */
     public final Class<T> clazz;
     /**
+     * 统计列表
+     */
+    private final Map<Integer, Double> statistics = new HashMap<>();
+    /**
      * 需要排除列属性
      */
     public String[] excludeFields;
@@ -127,10 +131,6 @@ public class ExcelUtil<T> {
      * 对象的子列表属性
      */
     private List<Field> subFields;
-    /**
-     * 统计列表
-     */
-    private final Map<Integer, Double> statistics = new HashMap<>();
 
     public ExcelUtil(Class<T> clazz) {
         this.clazz = clazz;
