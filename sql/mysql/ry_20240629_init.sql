@@ -53,11 +53,11 @@ values ('2', '普通角色', 'common', 2, 2, 1, 1, '0', '0', 'admin', sysdate(),
 -- ----------------------------
 -- 一级菜单
 insert into sys_menu
-values ('1', '系统管理', '0', '1', 'system', null, '', '', 1, 0, 'M', '0', '0', '', 'system', 'admin', sysdate(), '', null, '系统管理目录');
+values ('1', '系统管理', '0', '101', 'system', null, '', '', 1, 0, 'M', '0', '0', '', 'system', 'admin', sysdate(), '', null, '系统管理目录');
 insert into sys_menu
-values ('2', '系统监控', '0', '2', 'monitor', null, '', '', 1, 0, 'M', '0', '0', '', 'monitor', 'admin', sysdate(), '', null, '系统监控目录');
+values ('2', '系统监控', '0', '102', 'monitor', null, '', '', 1, 0, 'M', '0', '0', '', 'monitor', 'admin', sysdate(), '', null, '系统监控目录');
 insert into sys_menu
-values ('3', '系统工具', '0', '3', 'tool', null, '', '', 1, 0, 'M', '0', '0', '', 'tool', 'admin', sysdate(), '', null, '系统工具目录');
+values ('3', '系统工具', '0', '103', 'tool', null, '', '', 1, 0, 'M', '0', '0', '', 'tool', 'admin', sysdate(), '', null, '系统工具目录');
 -- 二级菜单
 insert into sys_menu
 values ('100', '用户管理', '1', '1', 'user', 'system/user/index', '', '', 1, 0, 'C', '0', '0', 'system:user:list', 'user', 'admin', sysdate(), '', null,
