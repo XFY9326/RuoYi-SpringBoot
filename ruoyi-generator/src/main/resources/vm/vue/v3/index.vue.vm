@@ -73,7 +73,7 @@
             plain
             icon="Plus"
             @click="handleAdd"
-            v-hasPermi="['${moduleName}:${businessName}:add']"
+            v-hasPermi:parent="['${moduleName}:${businessName}:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -83,7 +83,7 @@
             icon="Edit"
             :disabled="single"
             @click="handleUpdate"
-            v-hasPermi="['${moduleName}:${businessName}:edit']"
+            v-hasPermi:parent="['${moduleName}:${businessName}:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -93,7 +93,7 @@
             icon="Delete"
             :disabled="multiple"
             @click="handleDelete"
-            v-hasPermi="['${moduleName}:${businessName}:remove']"
+            v-hasPermi:parent="['${moduleName}:${businessName}:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -102,7 +102,7 @@
             plain
             icon="Download"
             @click="handleExport"
-            v-hasPermi="['${moduleName}:${businessName}:export']"
+            v-hasPermi:parent="['${moduleName}:${businessName}:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>

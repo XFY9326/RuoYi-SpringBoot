@@ -73,7 +73,7 @@
             plain
             icon="Plus"
             @click="handleAdd"
-            v-hasPermi="['${moduleName}:${businessName}:add']"
+            v-hasPermi:parent="['${moduleName}:${businessName}:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
