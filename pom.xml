@@ -35,7 +35,7 @@
         <javax.xml.version>2.3.1</javax.xml.version>
         <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
         <springdoc.version>2.6.0</springdoc.version>
-        <mysql.version>9.0.0</mysql.version>
+        <mysql.version>9.1.0</mysql.version>
         <oracle.version>10.2.0.4.0</oracle.version>
     </properties>
 
