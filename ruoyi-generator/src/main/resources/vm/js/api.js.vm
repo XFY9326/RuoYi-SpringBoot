@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询${functionName}列表
-export function list${BusinessName}(query) {
+export async function list${BusinessName}(query) {
     return request({
         url: '/${moduleName}/${businessName}/list',
         method: 'get',
@@ -10,7 +10,7 @@ export function list${BusinessName}(query) {
 }
 
 // 查询${functionName}详细
-export function get${BusinessName}(${pkColumn.javaField}) {
+export async function get${BusinessName}(${pkColumn.javaField}) {
     return request({
         url: '/${moduleName}/${businessName}/' + ${pkColumn.javaField},
         method: 'get'
@@ -18,7 +18,7 @@ export function get${BusinessName}(${pkColumn.javaField}) {
 }
 
 // 新增${functionName}
-export function add${BusinessName}(data) {
+export async function add${BusinessName}(data) {
     return request({
         url: '/${moduleName}/${businessName}',
         method: 'post',
@@ -27,7 +27,7 @@ export function add${BusinessName}(data) {
 }
 
 // 修改${functionName}
-export function update${BusinessName}(data) {
+export async function update${BusinessName}(data) {
     return request({
         url: '/${moduleName}/${businessName}',
         method: 'put',
@@ -36,7 +36,7 @@ export function update${BusinessName}(data) {
 }
 
 // 删除${functionName}
-export function del${BusinessName}(${pkColumn.javaField}) {
+export async function del${BusinessName}(${pkColumn.javaField}) {
     return request({
         url: '/${moduleName}/${businessName}/' + ${pkColumn.javaField},
         method: 'delete'
