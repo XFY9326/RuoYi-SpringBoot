@@ -51,6 +51,12 @@ sh ry.sh backup 001
 sh ry.sh rollback 001
 ```
 
+注意，由于Git会修改换行符号，执行shell脚本前建议强制将CRLF转为LF
+
+```shell
+sed -i "s/\r$//" ry.sh
+```
+
 ## 数据库
 
 ### MySQL

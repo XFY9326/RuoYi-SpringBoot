@@ -25,6 +25,7 @@ HEALTH_CHECK_TOTAL_ATTEMPTS=120
 
 BACKUP_DIR_PATH="${PROJECT_PATH}/backup"
 ROLLBACK_DIR_PATH="${PROJECT_PATH}/rollback"
+RUN_LOG_FILE="${PROJECT_PATH}/run.log"
 PID_FILE="${PROJECT_PATH}/app.pid"
 PID_CHECK_INTERVAL_SECONDS=1
 PID_CHECK_TOTAL_ATTEMPTS=10
@@ -93,7 +94,7 @@ start() {
   fi
 
   echo "Starting server"
-  nohup $JAVA_BIN "${JVM_ARGS}" -jar "${JAR_PATH}" "${APP_ARGS}" >/dev/null 2>&1 &
+  nohup $JAVA_BIN "${JVM_ARGS}" -jar "${JAR_PATH}" "${APP_ARGS}" > "${RUN_LOG_FILE}" 2>&1 &
 
   echo $! >"${PID_FILE}"
 
