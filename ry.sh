@@ -20,7 +20,7 @@ JVM_ARGS="-Djava.security.egd=file:/dev/./urandom Xms512m -Xmx2048m"
 APP_ARGS="--spring.config.location=file:${CONFIG_DIR_PATH}/"
 
 HEALTH_CHECK_URL="http://127.0.0.1:8080/health/check"
-HEALTH_CHECK_INTERVAL_SECONDS=3
+HEALTH_CHECK_INTERVAL_SECONDS=2
 HEALTH_CHECK_TOTAL_ATTEMPTS=120
 
 BACKUP_DIR_PATH="${PROJECT_PATH}/backup"
@@ -51,7 +51,7 @@ check_health() {
   echo "Checking server health"
   ATTEMPT=1
   while [ $ATTEMPT -le $HEALTH_CHECK_TOTAL_ATTEMPTS ]; do
-    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_CHECK_URL" || true)
+    RESPONSE=$(curl -s -m 5 -o /dev/null -w "%{http_code}" "$HEALTH_CHECK_URL" || true)
 
     if [ "$RESPONSE" -eq "204" ]; then
         echo "Health check passed"
@@ -64,6 +64,23 @@ check_health() {
 
   echo "Health check failed!"
   return 1
+}
+
+check_pid() {
+  JVM_PID=$(jps -l | grep "${JAR_FILE_NAME}" | awk -F' ' '{print $1}' | grep -q "^$1$")
+  if [ -z "${JVM_PID}" ]; then
+    echo "Error: Current watching PID $1 may not correct."
+    JAR_PID="$(pgrep -f "${JAR_FILE_NAME}" || true)"
+    if [ -n "${JAR_PID}" ]; then
+      echo "Current JAR ${JAR_FILE_NAME} may running at PID ${JAR_PID}"
+    else
+      echo "Current JVM processes:"
+      jps -l
+    fi
+    return 1
+  else
+    return 0
+  fi
 }
 
 not_running_process_check() {
@@ -84,8 +101,14 @@ start() {
 
   if is_running; then
     PID=$(cat "${PID_FILE}")
-    echo "Server (pid ${PID}) already started"
-    return 0
+    if check_pid "${PID}"; then
+      echo "Server (pid ${PID}) already started"
+      return 0
+    else
+      echo "Please check manually and modify PID file ${PID_FILE}"
+      echo "Stop starting server"
+      exit 1
+    fi
   fi
 
   if [ ! -f "${JAR_PATH}" ]; then
@@ -130,20 +153,30 @@ stop() {
   if [ -f "${PID_FILE}" ]; then
     PID=$(cat "${PID_FILE}")
 
+    if ! check_pid "${PID}"; then
+      echo "Stop killing server"
+      exit 1
+    fi
+
     echo "Killing server (pid ${PID})"
     kill -15 "${PID}"
 
-    sleep 1
+    sleep 2
 
     ATTEMPT=0
     while is_running; do
       if [ "${ATTEMPT}" -ge "${PID_CHECK_TOTAL_ATTEMPTS}" ]; then
-        echo "Server kill failed!"
-        exit 1
+        kill -9 "${PID}"
+        sleep 2
+        if is_running; then
+          echo "Server kill failed!"
+          exit 1
+        fi
+      else
+        echo "Waiting for server killing ..."
+        sleep $PID_CHECK_INTERVAL_SECONDS
+        ATTEMPT=$((ATTEMPT + 1))
       fi
-      echo "Waiting for server killing ..."
-      sleep $PID_CHECK_INTERVAL_SECONDS
-      ATTEMPT=$((ATTEMPT + 1))
     done
 
     rm -rf "${PID_FILE}"
@@ -155,7 +188,9 @@ stop() {
 status() {
   if is_running; then
     PID=$(cat "${PID_FILE}")
-    echo "Server is running (pid ${PID})"
+    if check_pid "${PID}"; then
+      echo "Server is running (pid ${PID})"
+    fi
     check_health
     return $?
   else
