@@ -67,9 +67,10 @@ check_health() {
 }
 
 check_pid() {
-  JVM_PID=$(jps -l | grep "${JAR_FILE_NAME}" | awk -F' ' '{print $1}' | grep -q "^$1$")
+  CHECK_PID=$1
+  JVM_PID=$(jps -l | grep "${JAR_FILE_NAME}" | awk -F' ' '{print $1}' | grep -w "${CHECK_PID}")
   if [ -z "${JVM_PID}" ]; then
-    echo "Error: Current watching PID $1 may not correct."
+    echo "Error: Current watching PID ${CHECK_PID} may not correct"
     JAR_PID="$(pgrep -f "${JAR_FILE_NAME}" || true)"
     if [ -n "${JAR_PID}" ]; then
       echo "Current JAR ${JAR_FILE_NAME} may running at PID ${JAR_PID}"
