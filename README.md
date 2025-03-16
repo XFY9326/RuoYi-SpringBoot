@@ -1,12 +1,12 @@
-# RuoYi v3.8.8
+# RuoYi v3.8.9
 
 ## 基线
 
 原始仓库: https://github.com/yangzongzhuan/RuoYi-Vue  
 Oracle部分: https://github.com/yangzongzhuan/RuoYi-Oracle
 
-- RuoYi-Vue基于Commit: 1810f30
-- RuoYi-Oracle基于Commit: 210dfc7 (仅限数据库相关部分)
+- RuoYi-Vue基于Commit: 245dea7
+- RuoYi-Oracle基于Commit: 2c6cd67 (仅限数据库相关部分)
 
 ## 前端
 

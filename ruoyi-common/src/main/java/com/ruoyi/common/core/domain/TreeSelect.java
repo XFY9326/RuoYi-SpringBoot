@@ -1,8 +1,10 @@
 package com.ruoyi.common.core.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.domain.entity.SysMenu;
+import com.ruoyi.common.utils.StringUtils;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -29,6 +31,11 @@ public class TreeSelect implements Serializable {
     private String label;
 
     /**
+     * 节点禁用
+     */
+    private boolean disabled = false;
+
+    /**
      * 子节点
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -41,6 +48,7 @@ public class TreeSelect implements Serializable {
     public TreeSelect(SysDept dept) {
         this.id = dept.getDeptId();
         this.label = dept.getDeptName();
+        this.disabled = StringUtils.equals(UserConstants.DEPT_DISABLE, dept.getStatus());
         this.children = dept.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
     }
 
@@ -65,6 +73,15 @@ public class TreeSelect implements Serializable {
     public void setLabel(String label) {
         this.label = label;
     }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
 
     public List<TreeSelect> getChildren() {
         return children;

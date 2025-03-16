@@ -6,12 +6,12 @@
 
     <groupId>com.ruoyi</groupId>
     <artifactId>ruoyi</artifactId>
-    <version>3.8.8</version>
+    <version>3.8.9</version>
 
     <name>ruoyi</name>
 
     <properties>
-        <ruoyi.version>3.8.8</ruoyi.version>
+        <ruoyi.version>3.8.9</ruoyi.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>

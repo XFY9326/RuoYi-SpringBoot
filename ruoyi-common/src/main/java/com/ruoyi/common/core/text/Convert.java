@@ -1,7 +1,6 @@
 package com.ruoyi.common.core.text;
 
 import com.ruoyi.common.utils.StringUtils;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -460,7 +459,7 @@ public class Convert {
 
     /**
      * 转换为boolean<br>
-     * String支持的值为：true、false、yes、ok、no，1,0 如果给定的值为空，或者转换失败，返回默认值<br>
+     * String支持的值为：true、false、yes、ok、no、1、0、是、否 如果给定的值为空，或者转换失败，返回默认值<br>
      * 转换失败不会报错
      *
      * @param value        被转换的值
@@ -480,8 +479,8 @@ public class Convert {
         }
         valueStr = valueStr.trim().toLowerCase();
         return switch (valueStr) {
-            case "true", "yes", "ok", "1" -> true;
-            case "false", "no", "0" -> false;
+            case "true", "yes", "ok", "1", "是" -> true;
+            case "false", "no", "0", "否" -> false;
             default -> defaultValue;
         };
     }
@@ -667,11 +666,18 @@ public class Convert {
 
         if (obj instanceof String) {
             return (String) obj;
-        } else if (obj instanceof byte[]) {
-            return str((byte[]) obj, charset);
-        } else if (obj instanceof Byte[]) {
-            byte[] bytes = ArrayUtils.toPrimitive((Byte[]) obj);
-            return str(bytes, charset);
+        } else if (obj instanceof byte[] || obj instanceof Byte[]) {
+            if (obj instanceof byte[]) {
+                return str((byte[]) obj, charset);
+            } else {
+                Byte[] bytes = (Byte[]) obj;
+                int length = bytes.length;
+                byte[] dest = new byte[length];
+                for (int i = 0; i < length; i++) {
+                    dest[i] = bytes[i];
+                }
+                return str(dest, charset);
+            }
         } else if (obj instanceof ByteBuffer) {
             return str((ByteBuffer) obj, charset);
         }
@@ -767,7 +773,6 @@ public class Convert {
                 c[i] = '\u3000';
             } else if (c[i] < '\177') {
                 c[i] = (char) (c[i] + 65248);
-
             }
         }
         return new String(c);
