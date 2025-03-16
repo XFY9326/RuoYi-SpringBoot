@@ -8,26 +8,42 @@ SCRIPT_DIR=$(
 )
 PROJECT_PATH=$(realpath "${SCRIPT_DIR}")
 
+# Java可执行路径
 JAVA_BIN="java"
 
+# JAR文件名
 JAR_FILE_NAME="ruoyi-admin.jar"
+# JAR文件路径
 JAR_PATH="${PROJECT_PATH}/${JAR_FILE_NAME}"
 
+# 配置文件目录
 CONFIG_DIR_NAME="config"
+# 配置文件路径
 CONFIG_DIR_PATH="${PROJECT_PATH}/${CONFIG_DIR_NAME}"
 
+# JVM参数
 JVM_ARGS="-Djava.security.egd=file:/dev/./urandom Xms512m -Xmx2048m"
+# 应用参数
 APP_ARGS="--spring.config.location=file:${CONFIG_DIR_PATH}/"
 
+# 健康检查URL
 HEALTH_CHECK_URL="http://127.0.0.1:8080/health/check"
+# 健康检查间隔 单位：秒
 HEALTH_CHECK_INTERVAL_SECONDS=2
+# 健康检查总次数
 HEALTH_CHECK_TOTAL_ATTEMPTS=120
 
+# 备份文件目录
 BACKUP_DIR_PATH="${PROJECT_PATH}/backup"
+# 回滚文件目录
 ROLLBACK_DIR_PATH="${PROJECT_PATH}/rollback"
+# 运行日志文件
 RUN_LOG_FILE="${PROJECT_PATH}/run.log"
+# PID文件
 PID_FILE="${PROJECT_PATH}/app.pid"
+# PID检查间隔 单位：秒
 PID_CHECK_INTERVAL_SECONDS=1
+# PID检查总次数
 PID_CHECK_TOTAL_ATTEMPTS=10
 
 cd "${PROJECT_PATH}"
