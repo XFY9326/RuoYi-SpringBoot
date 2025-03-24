@@ -1,8 +1,7 @@
 package com.ruoyi.framework.config;
 
 import com.google.code.kaptcha.text.impl.DefaultTextCreator;
-
-import java.util.Random;
+import org.apache.commons.lang3.RandomUtils;
 
 /**
  * 验证码文本生成器
@@ -10,44 +9,43 @@ import java.util.Random;
  * @author ruoyi
  */
 public class KaptchaTextCreator extends DefaultTextCreator {
-    private static final String[] CNUMBERS = "0,1,2,3,4,5,6,7,8,9,10".split(",");
+    private static final String[] NUMBER_CHAR_ARRAY = "0,1,2,3,4,5,6,7,8,9,10".split(",");
 
     @Override
     public String getText() {
-        int result = 0;
-        Random random = new Random();
-        int x = random.nextInt(10);
-        int y = random.nextInt(10);
+        int result;
+        int x = RandomUtils.secure().randomInt(0, 10);
+        int y = RandomUtils.secure().randomInt(0, 10);
         StringBuilder suChinese = new StringBuilder();
-        int randomoperands = random.nextInt(3);
-        if (randomoperands == 0) {
+        int randomOperator = RandomUtils.secure().randomInt(0, 3);
+        if (randomOperator == 0) {
             result = x * y;
-            suChinese.append(CNUMBERS[x]);
+            suChinese.append(NUMBER_CHAR_ARRAY[x]);
             suChinese.append("*");
-            suChinese.append(CNUMBERS[y]);
-        } else if (randomoperands == 1) {
+            suChinese.append(NUMBER_CHAR_ARRAY[y]);
+        } else if (randomOperator == 1) {
             if ((x != 0) && y % x == 0) {
                 result = y / x;
-                suChinese.append(CNUMBERS[y]);
+                suChinese.append(NUMBER_CHAR_ARRAY[y]);
                 suChinese.append("/");
-                suChinese.append(CNUMBERS[x]);
+                suChinese.append(NUMBER_CHAR_ARRAY[x]);
             } else {
                 result = x + y;
-                suChinese.append(CNUMBERS[x]);
+                suChinese.append(NUMBER_CHAR_ARRAY[x]);
                 suChinese.append("+");
-                suChinese.append(CNUMBERS[y]);
+                suChinese.append(NUMBER_CHAR_ARRAY[y]);
             }
         } else {
             if (x >= y) {
                 result = x - y;
-                suChinese.append(CNUMBERS[x]);
+                suChinese.append(NUMBER_CHAR_ARRAY[x]);
                 suChinese.append("-");
-                suChinese.append(CNUMBERS[y]);
+                suChinese.append(NUMBER_CHAR_ARRAY[y]);
             } else {
                 result = y - x;
-                suChinese.append(CNUMBERS[y]);
+                suChinese.append(NUMBER_CHAR_ARRAY[y]);
                 suChinese.append("-");
-                suChinese.append(CNUMBERS[x]);
+                suChinese.append(NUMBER_CHAR_ARRAY[x]);
             }
         }
         suChinese.append("=?@").append(result);
