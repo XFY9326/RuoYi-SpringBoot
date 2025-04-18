@@ -117,7 +117,7 @@ comment on column sys_user.avatar is '头像路径';
 
 comment on column sys_user.password is '密码';
 
-comment on column sys_user.status is '帐号状态（0正常 1停用）';
+comment on column sys_user.status is '账号状态（0正常 1停用）';
 
 comment on column sys_user.del_flag is '删除标志（0代表存在 2代表删除）';
 
