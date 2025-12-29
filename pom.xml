@@ -16,27 +16,28 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
         <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
-        <druid.version>1.2.24</druid.version>
+        <maven-war-plugin.version>3.5.1</maven-war-plugin.version>
+        <druid.version>1.2.27</druid.version>
         <bitwalker.version>1.21</bitwalker.version>
         <kaptcha.version>2.3.3</kaptcha.version>
-        <pagehelper.boot.version>2.1.0</pagehelper.boot.version>
-        <mybatis.version>3.0.4</mybatis.version>
-        <fastjson.version>2.0.56</fastjson.version>
-        <jackson.version>2.18.3</jackson.version>
-        <oshi.version>6.8.0</oshi.version>
-        <commons.io.version>2.18.0</commons.io.version>
-        <commons.text.version>1.13.0</commons.text.version>
-        <commons.lang3.version>3.17.0</commons.lang3.version>
-        <commons.compress.version>1.27.1</commons.compress.version>
-        <poi.version>5.4.0</poi.version>
-        <snakeyaml.version>2.4</snakeyaml.version>
+        <pagehelper.boot.version>2.1.1</pagehelper.boot.version>
+        <mybatis.version>3.0.5</mybatis.version>
+        <fastjson.version>2.0.60</fastjson.version>
+        <jackson.version>2.20.1</jackson.version>
+        <oshi.version>6.9.2</oshi.version>
+        <commons.io.version>2.21.0</commons.io.version>
+        <commons.text.version>1.15.0</commons.text.version>
+        <commons.lang3.version>3.20.0</commons.lang3.version>
+        <commons.compress.version>1.28.0</commons.compress.version>
+        <poi.version>5.5.1</poi.version>
+        <snakeyaml.version>2.5</snakeyaml.version>
         <velocity.version>2.4.1</velocity.version>
-        <jwt.version>0.12.6</jwt.version>
+        <jwt.version>0.13.0</jwt.version>
         <google.findbugs.version>3.0.1</google.findbugs.version>
         <javax.xml.version>2.3.1</javax.xml.version>
         <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
-        <springdoc.version>2.8.5</springdoc.version>
-        <mysql.version>9.2.0</mysql.version>
+        <springdoc.version>2.8.14</springdoc.version>
+        <mysql.version>9.5.0</mysql.version>
         <oracle.version>10.2.0.4.0</oracle.version>
     </properties>
 
@@ -44,7 +45,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.4</version>
+        <version>3.5.9</version>
         <relativePath/>
     </parent>
 
